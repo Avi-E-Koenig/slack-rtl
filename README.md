@@ -35,11 +35,15 @@ To update, pull the latest version, click the reload icon on the extension's car
 
 **Firefox** (109+): open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts. The manifest passes `web-ext lint`, but Firefox hasn't been tested against live Slack yet; reports welcome.
 
+## Optional add-on: copy list numbers
+
+Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [`extras/copy-list-numbers/`](extras/copy-list-numbers) is a separate, **opt-in** extension that puts them back. Unlike the main extension it contains a small script (it only rewrites the copied plain text, only on `app.slack.com`, and sends nothing anywhere). Install it the same way (**Load unpacked** → `extras/copy-list-numbers`).
+
 ## Limitations
 
 - Web app only. The Slack desktop app is Electron and can't load browser extensions.
 - Slack changes its markup from time to time; if something breaks, please open an issue (or a PR!).
-- When you copy a numbered list out of Slack, the numbers are dropped (Slack's copy behaviour; not fixed yet).
+- When you copy a numbered list out of Slack, the numbers are dropped (Slack's copy behaviour); install the optional add-on above to keep them.
 
 ## Contributing
 
@@ -59,13 +63,13 @@ Tips:
 | Command | What it does |
 |---|---|
 | `npm run login` | Chromium with a dedicated test profile (`.pw-profile/`, git-ignored) and **no** automation flags, so Google SSO works. Log in to Slack once here. |
-| `npm run dev` | Same profile with the unpacked extension loaded. |
+| `npm run dev` | Same profile with the unpacked extension loaded (`EXTRAS=1 npm run dev` also loads `extras/`). |
 | `npm run cdp -- <script.mjs> [url]` | Attaches to the running browser and runs `export default async page => …` against the Slack tab; prints the result as JSON. |
 | `npm test` | Offline regression tests: Slack-shaped fixtures + Slack's problem rules, `rtl.css` injected first (like Chrome), assertions on rendered positions. No Slack login needed. |
 | `npm run smoke` | Counts matches for every selector in `rtl.css` on the current Slack page, to catch Slack renaming things. `0` = not on screen, or renamed. |
 | `npm run icons` | Re-renders the PNG icons from `extension/icons/icon.svg`. |
 | `npm run lint` | `web-ext lint` on the extension. |
-| `npm run package` | Builds `dist/slack-rtl-<version>.zip` for store upload. |
+| `npm run package` | Builds `dist/slack-rtl-<version>.zip` for store upload (`npm run package -- extras/copy-list-numbers` for the add-on). |
 
 **Releasing:** bump `version` in `extension/manifest.json` and `CHANGELOG.md`, merge, then push a matching tag (`git tag v0.3.0 && git push origin v0.3.0`). The Release workflow tests, lints and attaches `slack-rtl-<version>.zip` to a GitHub release.
 
