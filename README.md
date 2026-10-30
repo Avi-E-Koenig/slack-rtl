@@ -66,6 +66,8 @@ Tips:
 | `npm run lint` | `web-ext lint` on the extension. |
 | `npm run package` | Builds `dist/slack-rtl-<version>.zip` for store upload. |
 
+**Releasing:** bump `version` in `extension/manifest.json` and `CHANGELOG.md`, merge, then push a matching tag (`git tag v0.3.0 && git push origin v0.3.0`). The Release workflow tests, lints and attaches `slack-rtl-<version>.zip` to a GitHub release.
+
 > **Security:** CDP gives full control of that browser, including the logged-in Slack session. The tools bind it to `127.0.0.1:9222` only. Use a test workspace or account if you can, don't expose the port, and close the browser when you're done.
 
 ## License
