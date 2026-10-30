@@ -22,12 +22,18 @@
   powershell -ExecutionPolicy Bypass -File slack-rtl.ps1
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File slack-rtl.ps1 -CreateShortcut
+.EXAMPLE
+  powershell -ExecutionPolicy Bypass -File slack-rtl.ps1 -OpenUrl "slack://..."
+  Signing in: Windows sends Slack's slack:// sign-in link to your normal Slack.
+  Copy the link from the browser's "Open Slack" button instead and pass it here
+  to hand it to the running Slack (RTL) instance.
 #>
 param(
   [int]$Port = 9229,
   [string]$ProfileDir = (Join-Path $env:LOCALAPPDATA 'SlackRTL'),
   [string]$CssPath = (Join-Path $PSScriptRoot '..\..\extension\rtl.css'),
-  [switch]$CreateShortcut
+  [switch]$CreateShortcut,
+  [string]$OpenUrl
 )
 $ErrorActionPreference = 'Stop'
 
@@ -74,6 +80,13 @@ function Invoke-Cdp([string]$WsUrl, [string]$Expression) {
   } finally {
     $ws.Dispose()
   }
+}
+
+if ($OpenUrl) {
+  # A second launch with the same profile forwards its URL to the running instance.
+  Start-Process (Find-Slack) -ArgumentList "--user-data-dir=`"$ProfileDir`"", "`"$OpenUrl`""
+  Write-Host 'Link sent to Slack (RTL).'
+  return
 }
 
 $css = [IO.File]::ReadAllText((Resolve-Path $CssPath), [Text.Encoding]::UTF8)
