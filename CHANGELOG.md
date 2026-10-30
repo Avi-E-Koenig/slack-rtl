@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Offline regression tests (`npm test`): geometry assertions on Slack-shaped fixtures, including a control test proving the fixtures reproduce the stock bugs.
 - Dev tools: pinned Playwright via `package.json` (`npm run login|dev|cdp|smoke|icons|lint|package`), CDP bound to `127.0.0.1`, selector smoke check, security note.
 
 ## 0.2.0 (2026-10-30)

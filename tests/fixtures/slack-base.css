@@ -1,0 +1,15 @@
+/* Minimal re-creation of the Slack web-client rules that cause the RTL bugs
+   (observed live on app.slack.com, 2026-10). Loaded AFTER rtl.css, mirroring
+   how Chrome injects content-script CSS before the page's own sheets. */
+body { font: 15px/1.46668 sans-serif; margin: 0; width: 800px; }
+.p-rich_text_block { text-align: left; width: 100%; }
+.p-rich_text_list { margin: 0; margin-inline-start: 0; padding-inline-start: 0; }
+.p-rich_text_list li { margin-inline-start: 28px; }
+.p-rich_text_list__bullet { list-style-type: none; }
+.p-rich_text_list__bullet li::before { content: "•"; text-align: center; width: 22px; margin-inline: -28px 6px; display: inline-block; }
+.p-rich_text_list__ordered { list-style-type: decimal; }
+.p-rich_text_list__ordered > li { margin-inline-start: 20px; padding-inline-start: 8px; }
+.c-mrkdwn__quote { position: relative; display: block; padding-left: 16px; }
+.c-mrkdwn__quote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #ddd; }
+.c-mrkdwn__pre { display: block; padding: 8px; white-space: pre; }
+.p-channel_sidebar__member_label { margin-left: 8px; }
