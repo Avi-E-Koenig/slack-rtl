@@ -23,17 +23,22 @@
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File slack-rtl.ps1 -CreateShortcut
 .EXAMPLE
+  powershell -ExecutionPolicy Bypass -File slack-rtl.ps1 -SignIn
+  First sign-in: Windows sends Slack's slack:// sign-in link to your normal
+  Slack. -SignIn waits for that link on the clipboard (copied with the
+  copy-slack-link bookmarklet on the "Launching ..." page) and hands it to the
+  running Slack (RTL) instance.
+.EXAMPLE
   powershell -ExecutionPolicy Bypass -File slack-rtl.ps1 -OpenUrl "slack://..."
-  Signing in: Windows sends Slack's slack:// sign-in link to your normal Slack.
-  Copy the link from the browser's "Open Slack" button instead and pass it here
-  to hand it to the running Slack (RTL) instance.
+  Same hand-off, with the link given directly.
 #>
 param(
   [int]$Port = 9229,
   [string]$ProfileDir = (Join-Path $env:LOCALAPPDATA 'SlackRTL'),
   [string]$CssPath = (Join-Path $PSScriptRoot '..\..\extension\rtl.css'),
   [switch]$CreateShortcut,
-  [string]$OpenUrl
+  [string]$OpenUrl,
+  [switch]$SignIn
 )
 $ErrorActionPreference = 'Stop'
 
@@ -82,11 +87,34 @@ function Invoke-Cdp([string]$WsUrl, [string]$Expression) {
   }
 }
 
-if ($OpenUrl) {
+function Send-ToRtlInstance([string]$Url) {
   # A second launch with the same profile forwards its URL to the running instance.
-  Start-Process (Find-Slack) -ArgumentList "--user-data-dir=`"$ProfileDir`"", "`"$OpenUrl`""
+  Start-Process (Find-Slack) -ArgumentList "--user-data-dir=`"$ProfileDir`"", "`"$Url`""
   Write-Host 'Link sent to Slack (RTL).'
-  return
+}
+
+if ($OpenUrl) { Send-ToRtlInstance $OpenUrl; return }
+
+if ($SignIn) {
+  try { Invoke-RestMethod "http://127.0.0.1:$Port/json/version" -TimeoutSec 3 | Out-Null }
+  catch { throw 'Slack (RTL) is not running. Start it first (slack-rtl.cmd), then run -SignIn in a second window.' }
+  $magic = '^slack://T[A-Z0-9]+/magic-login/\S+$'
+  Write-Host 'Waiting for a Slack sign-in link on the clipboard (5 min)...'
+  Write-Host '1. In the Slack (RTL) window click "Sign In to Slack" and sign in in your browser.'
+  Write-Host '2. On the "Launching ..." page, cancel the "Open Slack?" prompt and click your "Copy Slack link" bookmark.'
+  Write-Host "   (Bookmark setup: README, or create a bookmark whose URL is the contents of copy-slack-link.bookmarklet.js)"
+  Add-Type -AssemblyName System.Windows.Forms
+  $deadline = (Get-Date).AddMinutes(5)
+  while ((Get-Date) -lt $deadline) {
+    $clip = (Get-Clipboard -Raw -ErrorAction SilentlyContinue)
+    if ($clip -and $clip.Trim() -match $magic) {
+      Send-ToRtlInstance $clip.Trim()
+      [Windows.Forms.Clipboard]::Clear()  # it's a one-time login token: don't leave it on the clipboard
+      return
+    }
+    Start-Sleep -Milliseconds 500
+  }
+  throw 'No Slack sign-in link was copied within 5 minutes.'
 }
 
 $css = [IO.File]::ReadAllText((Resolve-Path $CssPath), [Text.Encoding]::UTF8)
