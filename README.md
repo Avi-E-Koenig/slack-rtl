@@ -39,6 +39,8 @@ To update, pull the latest version, click the reload icon on the extension's car
 
 Extensions can't run inside the desktop app, so [`desktop/windows/slack-rtl.ps1`](desktop/windows/slack-rtl.ps1) starts a separate **Slack (RTL)** instance and injects the same `rtl.css` into it:
 
+Double-click `desktop\windows\slack-rtl.cmd`, or from PowerShell:
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File desktop\windows\slack-rtl.ps1                   # run once
 powershell -ExecutionPolicy Bypass -File desktop\windows\slack-rtl.ps1 -CreateShortcut   # add "Slack (RTL)" to the Start menu
