@@ -22,25 +22,43 @@ It also works in threads, search results, and light and dark themes.
 
 It's **CSS only**: no JavaScript, no permissions, no data collection. It only runs on `app.slack.com`.
 
-## Install
+## Install in Chrome
 
-Not on the Chrome Web Store yet. To install from source:
+It's not on the Chrome Web Store yet, so you load it from this repo. It takes about a minute, and Edge and other Chromium browsers work the same way.
 
-1. Clone or [download](../../archive/refs/heads/main.zip) this repo.
-2. Open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and select the `extension/` folder.
-4. Reload your Slack tab.
+1. **Download:** on this page click **Code → Download ZIP** ([direct link](../../archive/refs/heads/main.zip)), then extract the ZIP. You get a folder named `slack-rtl-main`.
+2. **Open the extensions page:** type `chrome://extensions` in the address bar.
+3. **Turn on Developer mode** with the toggle in the top-right corner.
+4. **Load it:** click **Load unpacked** and select the `extension` folder *inside* `slack-rtl-main`, the one that contains `manifest.json`. **Slack RTL** appears in the list.
+5. **Reload Slack:** refresh any open [app.slack.com](https://app.slack.com) tab. Hebrew messages now align right.
 
-To update, pull the latest version, click the reload icon on the extension's card, then reload Slack.
+Keep the extracted folder; Chrome loads the extension from it. You can move it somewhere permanent before step 4.
 
-**Firefox** (109+): open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts. The manifest passes `web-ext lint`, but Firefox hasn't been tested against live Slack yet; reports welcome.
+**Update:** download and extract the new ZIP over the old folder, click the ↻ reload icon on the extension's card in `chrome://extensions`, then refresh Slack.
 
-## Desktop-style window
+**Remove:** click **Remove** on the extension's card.
 
-The Slack desktop app (Electron) can't load browser extensions, and Slack deliberately blocks injecting into it. Install the web app as its own window instead; it gets a taskbar icon and notifications, and this extension works inside it:
+> Chrome may show a "Disable developer mode extensions" banner at startup. Click ✕ to keep it; this is normal for extensions loaded from a folder.
+
+### Use it like a desktop app
+
+Install Slack as its own app window. It gets a taskbar or dock icon and notifications, and the extension works inside it:
 
 - **Chrome:** open [app.slack.com](https://app.slack.com), then ⋮ → **Cast, save and share** → **Install page as app**.
 - **Edge:** ⋯ → **Apps** → **Install this site as an app**.
+
+### Firefox
+
+Firefox 109+: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts until it's published on Firefox Add-ons.
+
+## The Slack desktop app is not supported
+
+The installed Slack desktop app (Electron) can't load browser extensions. We tried injecting the same CSS through a launcher ([#3](../../issues/3), [#16](../../pull/16)). It worked, but it isn't practical:
+
+- Slack deliberately refuses to start with a debugging port on its normal profile, to protect your session. So injection needs a separate Slack instance with its own profile and its own sign-in.
+- Signing in to that instance is unreliable. The browser's sign-in hand-off (`slack://…`) always goes to your normal Slack, never to the second instance.
+
+Patching Slack's app files isn't an option either: they're signed and overwritten on every update. Use the web app, ideally [installed as an app window](#use-it-like-a-desktop-app). If you find a clean way to support the desktop app, PRs are welcome.
 
 ## Optional add-on: copy list numbers
 
@@ -48,7 +66,7 @@ Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [
 
 ## Limitations
 
-- Web app only. The Electron desktop app can't load extensions; use the [desktop-style window](#desktop-style-window) instead.
+- Web app only: the [Slack desktop app is not supported](#the-slack-desktop-app-is-not-supported). Use the web app [installed as an app window](#use-it-like-a-desktop-app) instead.
 - Slack changes its markup from time to time; if something breaks, please open an issue (or a PR!).
 - When you copy a numbered list out of Slack, the numbers are dropped (Slack's copy behaviour); install the optional add-on above to keep them.
 
