@@ -32,6 +32,8 @@ Not on the Chrome Web Store yet. To install from source:
 
 To update, pull the latest version, click the reload icon on the extension's card, then reload Slack.
 
+**Firefox** (109+): open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts. The manifest passes `web-ext lint`, but Firefox hasn't been tested against live Slack yet; reports welcome.
+
 ## Limitations
 
 - Web app only. The Slack desktop app is Electron and can't load browser extensions.
@@ -55,6 +57,8 @@ Tips:
 - `tools/browser.sh`: plain Chromium with a persistent profile (`.pw-profile/`, git-ignored). Use it to log in to Slack once; it has no automation flags, so Google SSO works.
 - `NPM_GLOBAL=$(npm root -g) node tools/browser-ext.mjs`: the same profile with the unpacked extension loaded.
 - `NPM_GLOBAL=$(npm root -g) node tools/cdp.mjs <script.mjs> [url]`: attaches to the running browser and runs `export default async page => …` against the Slack tab, printing the result as JSON.
+
+`NPM_GLOBAL=$(npm root -g) node tools/icons.mjs` re-renders the PNG icons from `extension/icons/icon.svg`, and `scripts/package.sh` builds `dist/slack-rtl-<version>.zip` for store upload. Validate with `npx web-ext lint --source-dir extension`.
 
 `browser.sh` points at Playwright's Chromium under `~/.cache/ms-playwright/`; adjust the path for your version.
 
