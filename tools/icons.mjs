@@ -1,10 +1,8 @@
 // Renders extension/icons/icon.svg to the PNG sizes the stores require.
-// Usage: NPM_GLOBAL=$(npm root -g) node tools/icons.mjs
-import { createRequire } from 'node:module';
+// Usage: npm run icons
 import fs from 'node:fs';
 import path from 'node:path';
-const require = createRequire(import.meta.url);
-const { chromium } = require(path.join(process.env.NPM_GLOBAL, 'playwright'));
+import { chromium } from 'playwright';
 
 const dir = new URL('../extension/icons/', import.meta.url).pathname;
 const svg = fs.readFileSync(path.join(dir, 'icon.svg'), 'utf8');

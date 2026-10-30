@@ -52,15 +52,19 @@ Tips:
 
 ### Dev tools (optional)
 
-`tools/` has scripts to drive a test Chromium over CDP (requires [Playwright](https://playwright.dev) installed globally: `npm i -g playwright && npx playwright install chromium`):
+`tools/` drives a test Chromium over the Chrome DevTools Protocol (CDP). Setup: `npm install && npx playwright install chromium`.
 
-- `tools/browser.sh`: plain Chromium with a persistent profile (`.pw-profile/`, git-ignored). Use it to log in to Slack once; it has no automation flags, so Google SSO works.
-- `NPM_GLOBAL=$(npm root -g) node tools/browser-ext.mjs`: the same profile with the unpacked extension loaded.
-- `NPM_GLOBAL=$(npm root -g) node tools/cdp.mjs <script.mjs> [url]`: attaches to the running browser and runs `export default async page => …` against the Slack tab, printing the result as JSON.
+| Command | What it does |
+|---|---|
+| `npm run login` | Chromium with a dedicated test profile (`.pw-profile/`, git-ignored) and **no** automation flags, so Google SSO works. Log in to Slack once here. |
+| `npm run dev` | Same profile with the unpacked extension loaded. |
+| `npm run cdp -- <script.mjs> [url]` | Attaches to the running browser and runs `export default async page => …` against the Slack tab; prints the result as JSON. |
+| `npm run smoke` | Counts matches for every selector in `rtl.css` on the current Slack page, to catch Slack renaming things. `0` = not on screen, or renamed. |
+| `npm run icons` | Re-renders the PNG icons from `extension/icons/icon.svg`. |
+| `npm run lint` | `web-ext lint` on the extension. |
+| `npm run package` | Builds `dist/slack-rtl-<version>.zip` for store upload. |
 
-`NPM_GLOBAL=$(npm root -g) node tools/icons.mjs` re-renders the PNG icons from `extension/icons/icon.svg`, and `scripts/package.sh` builds `dist/slack-rtl-<version>.zip` for store upload. Validate with `npx web-ext lint --source-dir extension`.
-
-`browser.sh` points at Playwright's Chromium under `~/.cache/ms-playwright/`; adjust the path for your version.
+> **Security:** CDP gives full control of that browser, including the logged-in Slack session. The tools bind it to `127.0.0.1:9222` only. Use a test workspace or account if you can, don't expose the port, and close the browser when you're done.
 
 ## License
 
