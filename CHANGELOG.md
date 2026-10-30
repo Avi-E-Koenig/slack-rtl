@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Optional add-on `extras/copy-list-numbers` (opt-in, JS): keeps numbers when copying numbered lists out of Slack.
 - Canvases: per-paragraph direction; bulleted/numbered/checklist markers move to the right for Hebrew items.
 - Regression suite runs in both Chromium and Firefox (Gecko).
 - CI: tests + `web-ext lint` on every PR; tag `vX.Y.Z` builds the store zip and publishes a GitHub release.
