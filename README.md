@@ -35,13 +35,26 @@ To update, pull the latest version, click the reload icon on the extension's car
 
 **Firefox** (109+): open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts. The manifest passes `web-ext lint`, but Firefox hasn't been tested against live Slack yet; reports welcome.
 
+## Slack desktop app (Windows, experimental)
+
+Extensions can't run inside the desktop app, so [`desktop/windows/slack-rtl.ps1`](desktop/windows/slack-rtl.ps1) starts a separate **Slack (RTL)** instance and injects the same `rtl.css` into it:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File desktop\windows\slack-rtl.ps1                   # run once
+powershell -ExecutionPolicy Bypass -File desktop\windows\slack-rtl.ps1 -CreateShortcut   # add "Slack (RTL)" to the Start menu
+```
+
+- Slack deliberately refuses a debugging port on its normal profile, to protect your session. So this instance uses its own profile (`%LOCALAPPDATA%\SlackRTL`), and you sign in to it once. Your normal Slack is untouched.
+- Nothing in Slack's install folder is changed, so Slack updates don't break it.
+- **Security:** while it runs, any program on your computer can control that Slack instance through the local debugging port (`127.0.0.1:9229`, never exposed to the network). Only use it on a machine you trust.
+
 ## Optional add-on: copy list numbers
 
 Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [`extras/copy-list-numbers/`](extras/copy-list-numbers) is a separate, **opt-in** extension that puts them back. Unlike the main extension it contains a small script (it only rewrites the copied plain text, only on `app.slack.com`, and sends nothing anywhere). Install it the same way (**Load unpacked** → `extras/copy-list-numbers`).
 
 ## Limitations
 
-- Web app only. The Slack desktop app is Electron and can't load browser extensions.
+- The extension is for the web app. For the desktop app, see the experimental Windows launcher above.
 - Slack changes its markup from time to time; if something breaks, please open an issue (or a PR!).
 - When you copy a numbered list out of Slack, the numbers are dropped (Slack's copy behaviour); install the optional add-on above to keep them.
 
