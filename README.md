@@ -53,7 +53,7 @@ Tips:
 
 ### Dev tools (optional)
 
-`tools/` drives a test Chromium over the Chrome DevTools Protocol (CDP). Setup: `npm install && npx playwright install chromium`.
+`tools/` drives a test Chromium over the Chrome DevTools Protocol (CDP). Setup: `npm install && npx playwright install chromium firefox`.
 
 | Command | What it does |
 |---|---|

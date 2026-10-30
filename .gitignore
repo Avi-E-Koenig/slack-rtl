@@ -1,3 +1,4 @@
 .pw-profile/
 dist/
 node_modules/
+.ff-profile/
