@@ -97,7 +97,7 @@ if ($OpenUrl) { Send-ToRtlInstance $OpenUrl; return }
 
 if ($SignIn) {
   try { Invoke-RestMethod "http://127.0.0.1:$Port/json/version" -TimeoutSec 3 | Out-Null }
-  catch { throw 'Slack (RTL) is not running. Start it first (slack-rtl.cmd), then run -SignIn in a second window.' }
+  catch { throw 'Slack (RTL) is not running. Start it first (.\slack-rtl.cmd), then run .\slack-rtl.cmd -SignIn in a second window.' }
   $magic = '^slack://T[A-Z0-9]+/magic-login/\S+$'
   Write-Host 'Waiting for a Slack sign-in link on the clipboard (5 min)...'
   Write-Host '1. In the Slack (RTL) window click "Sign In to Slack" and sign in in your browser.'

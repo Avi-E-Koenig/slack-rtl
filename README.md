@@ -49,9 +49,9 @@ powershell -ExecutionPolicy Bypass -File desktop\windows\slack-rtl.ps1 -CreateSh
 - Slack deliberately refuses a debugging port on its normal profile, to protect your session. So this instance uses its own profile (`%LOCALAPPDATA%\SlackRTL`), and you sign in to it once. Your normal Slack is untouched.
 - **First sign-in:** Windows sends Slack's sign-in hand-off link to your *normal* Slack, so the RTL instance has to pick it up from the clipboard instead:
   1. One-time setup: create a browser bookmark named **Copy Slack link** whose URL is the contents of [`copy-slack-link.bookmarklet.js`](desktop/windows/copy-slack-link.bookmarklet.js).
-  2. With **Slack (RTL)** running, open a second window and run `slack-rtl.cmd -SignIn`. It waits for the link.
+  2. With **Slack (RTL)** running, open a second window and run `.\slack-rtl.cmd -SignIn` (from `desktop\windows`). It waits for the link.
   3. In the RTL window click **Sign In to Slack** and sign in in your browser. On the "Launching …" page, cancel the "Open Slack?" prompt and click the **Copy Slack link** bookmark. The RTL window signs in, and the link (a one-time login token) is cleared from the clipboard.
-  - Manual fallback: copy the `appUrl` from the page source (Ctrl+U), remove the `\` characters, and run `slack-rtl.cmd -OpenUrl "slack://T…/magic-login/…"`.
+  - Manual fallback: copy the `appUrl` from the page source (Ctrl+U), remove the `\` characters, and run `.\slack-rtl.cmd -OpenUrl "slack://T…/magic-login/…"`.
 - Nothing in Slack's install folder is changed, so Slack updates don't break it.
 - **Security:** while it runs, any program on your computer can control that Slack instance through the local debugging port (`127.0.0.1:9229`, never exposed to the network). Only use it on a machine you trust.
 
