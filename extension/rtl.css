@@ -61,3 +61,28 @@
 .p-channel_sidebar__name > span:first-child {
   unicode-bidi: isolate !important;
 }
+
+/* Canvases: the editor sets no direction at all, so every section is LTR.
+   Each paragraph/heading picks its own direction. */
+article.document-content .section > .content {
+  unicode-bidi: plaintext !important;
+  text-align: start !important;
+}
+/* List items are flex rows [marker][text], which CSS can't flip per item.
+   Lay them out inline instead: the marker becomes a neutral inline box at the
+   paragraph start, so in a Hebrew item it lands on the right. */
+article.document-content li.with-list-item-marker-container {
+  display: block !important;
+  unicode-bidi: plaintext !important;
+  text-align: start !important;
+}
+article.document-content li.with-list-item-marker-container > .list-item-marker-container {
+  display: inline-flex !important;
+  vertical-align: top !important;
+  padding: 0 4px !important; /* Slack pads one side only; RTL items need the gap on the other */
+}
+article.document-content li.with-list-item-marker-container > .section,
+article.document-content li.with-list-item-marker-container > .section > .content {
+  display: inline !important;
+  unicode-bidi: normal !important; /* let the text set the li's paragraph direction */
+}
