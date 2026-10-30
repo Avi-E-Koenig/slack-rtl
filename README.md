@@ -48,6 +48,7 @@ Tips:
 
 - All rules live in [`extension/rtl.css`](extension/rtl.css). Every declaration needs `!important`: Chrome injects content-script CSS *before* Slack's own stylesheets, so Slack's equal-specificity rules would otherwise win. Testing by pasting a `<style>` tag into DevTools hides this, so always verify with the extension actually loaded.
 - Prefer Slack's `data-qa` attributes and stable `p-`/`c-` class names over hashed class names (e.g. `foo__AbC12`), which change between deploys.
+- Run `npm test`, and add a fixture plus a test in `tests/` when you fix a new surface.
 - Please include before/after screenshots in your PR, using test content only.
 
 ### Dev tools (optional)
@@ -59,6 +60,7 @@ Tips:
 | `npm run login` | Chromium with a dedicated test profile (`.pw-profile/`, git-ignored) and **no** automation flags, so Google SSO works. Log in to Slack once here. |
 | `npm run dev` | Same profile with the unpacked extension loaded. |
 | `npm run cdp -- <script.mjs> [url]` | Attaches to the running browser and runs `export default async page => …` against the Slack tab; prints the result as JSON. |
+| `npm test` | Offline regression tests: Slack-shaped fixtures + Slack's problem rules, `rtl.css` injected first (like Chrome), assertions on rendered positions. No Slack login needed. |
 | `npm run smoke` | Counts matches for every selector in `rtl.css` on the current Slack page, to catch Slack renaming things. `0` = not on screen, or renamed. |
 | `npm run icons` | Re-renders the PNG icons from `extension/icons/icon.svg`. |
 | `npm run lint` | `web-ext lint` on the extension. |
