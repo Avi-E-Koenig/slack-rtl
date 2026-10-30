@@ -35,13 +35,20 @@ To update, pull the latest version, click the reload icon on the extension's car
 
 **Firefox** (109+): open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts. The manifest passes `web-ext lint`, but Firefox hasn't been tested against live Slack yet; reports welcome.
 
+## Desktop-style window
+
+The Slack desktop app (Electron) can't load browser extensions, and Slack deliberately blocks injecting into it. Install the web app as its own window instead; it gets a taskbar icon and notifications, and this extension works inside it:
+
+- **Chrome:** open [app.slack.com](https://app.slack.com), then ⋮ → **Cast, save and share** → **Install page as app**.
+- **Edge:** ⋯ → **Apps** → **Install this site as an app**.
+
 ## Optional add-on: copy list numbers
 
 Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [`extras/copy-list-numbers/`](extras/copy-list-numbers) is a separate, **opt-in** extension that puts them back. Unlike the main extension it contains a small script (it only rewrites the copied plain text, only on `app.slack.com`, and sends nothing anywhere). Install it the same way (**Load unpacked** → `extras/copy-list-numbers`).
 
 ## Limitations
 
-- Web app only. The Slack desktop app is Electron and can't load browser extensions.
+- Web app only. The Electron desktop app can't load extensions; use the [desktop-style window](#desktop-style-window) instead.
 - Slack changes its markup from time to time; if something breaks, please open an issue (or a PR!).
 - When you copy a numbered list out of Slack, the numbers are dropped (Slack's copy behaviour); install the optional add-on above to keep them.
 

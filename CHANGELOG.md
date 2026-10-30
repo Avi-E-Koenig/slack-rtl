@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Docs: recommended desktop setup is the web app installed as an app window (Chrome/Edge); the extension works there.
 - Optional add-on `extras/copy-list-numbers` (opt-in, JS): keeps numbers when copying numbered lists out of Slack.
 - Canvases: per-paragraph direction; bulleted/numbered/checklist markers move to the right for Hebrew items.
 - Regression suite runs in both Chromium and Firefox (Gecko).
