@@ -1,0 +1,63 @@
+/* Content-script CSS is injected before Slack's own sheets, so equal-specificity
+   Slack rules win; every declaration here needs !important. */
+
+/* Slack sets dir="auto" on .p-rich_text_block (correct direction) but then
+   hard-codes text-align: left, which is the main RTL bug. */
+.p-rich_text_block {
+  text-align: start !important;
+}
+
+/* Plain text sections: each <br>-separated line picks its own direction. */
+.p-rich_text_section {
+  unicode-bidi: plaintext !important;
+  text-align: start !important;
+}
+
+/* Lists and quotes follow the block's direction as a whole, so bullets and
+   the quote bar stay on the same side as the text. */
+.c-mrkdwn__quote {
+  padding-left: 0 !important;
+  padding-inline-start: 16px !important;
+}
+.c-mrkdwn__quote::before {
+  left: auto !important;
+  inset-inline-start: 0 !important;
+}
+
+/* Code stays LTR. */
+.c-mrkdwn__pre {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Inline code/links: isolate from surrounding Hebrew so e.g. `1 to add`
+   isn't reordered to "to add 1". */
+.c-mrkdwn__code,
+[data-qa="texty_input"] code,
+.c-link {
+  unicode-bidi: plaintext !important;
+}
+
+/* Keep "@Name" as one unit so the @ doesn't jump sides. */
+.c-member_slug {
+  unicode-bidi: plaintext !important;
+}
+
+/* Composer (Quill): Slack sets dir="auto" on the whole editor, so one Hebrew
+   line flips everything. Make each paragraph independent. */
+[data-qa="texty_input"] > p,
+[data-qa="texty_input"] li,
+[data-qa="texty_input"] blockquote {
+  unicode-bidi: plaintext !important;
+  text-align: start !important;
+}
+
+/* Sidebar: Slack puts dir="auto" on the whole name, so a Hebrew name flips the
+   row and the "guest" label lands before it with no gap. Keep the row LTR like
+   the rest of the UI and isolate just the name. */
+.p-channel_sidebar__name {
+  direction: ltr !important;
+}
+.p-channel_sidebar__name > span:first-child {
+  unicode-bidi: isolate !important;
+}

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Slack RTL",
+  "version": "0.1.0",
+  "description": "Hebrew / RTL support for the Slack web app.",
+  "content_scripts": [
+    {
+      "matches": ["https://app.slack.com/*"],
+      "css": ["rtl.css"],
+      "run_at": "document_start"
+    }
+  ]
+}
