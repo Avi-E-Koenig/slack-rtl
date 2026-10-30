@@ -1,13 +1,12 @@
-// Attach to the browser from browser.sh and run an inspection module against the Slack tab.
-// Usage: NPM_GLOBAL=$(npm root -g) node tools/cdp.mjs <script.mjs> [url]
+// Attach to the running dev browser and run an inspection module against the Slack tab.
+// Usage: npm run cdp -- <script.mjs> [url]
 // The script's default export receives (page) and its return value is printed as JSON.
-import { createRequire } from 'node:module';
 import path from 'node:path';
-const require = createRequire(import.meta.url);
-const { chromium } = require(path.join(process.env.NPM_GLOBAL, 'playwright'));
+import { chromium } from 'playwright';
+import { CDP_URL } from './config.mjs';
 
 const [script, url] = process.argv.slice(2);
-const browser = await chromium.connectOverCDP('http://localhost:9222');
+const browser = await chromium.connectOverCDP(CDP_URL);
 const pages = browser.contexts()[0].pages();
 const page = pages.find(p => p.url().includes('app.slack.com')) ?? pages[0];
 if (url) {
