@@ -47,6 +47,10 @@ powershell -ExecutionPolicy Bypass -File desktop\windows\slack-rtl.ps1 -CreateSh
 ```
 
 - Slack deliberately refuses a debugging port on its normal profile, to protect your session. So this instance uses its own profile (`%LOCALAPPDATA%\SlackRTL`), and you sign in to it once. Your normal Slack is untouched.
+- **First sign-in:** Windows sends Slack's sign-in hand-off link to your *normal* Slack, so pass it on yourself:
+  1. Click **Sign In to Slack** in the RTL window and sign in in your browser until you reach the "Launching …" page.
+  2. On that page press **Ctrl+U** (view source) and **Ctrl+F** for `slack:`. Copy the `appUrl` value (`slack:\/\/T…\/magic-login\/…?id=1`) and remove the backslashes: `slack://T…/magic-login/…?id=1`.
+  3. Run `slack-rtl.cmd -OpenUrl "slack://T…/magic-login/…?id=1"`. The RTL window signs in. The link is a one-time login token, so don't share it.
 - Nothing in Slack's install folder is changed, so Slack updates don't break it.
 - **Security:** while it runs, any program on your computer can control that Slack instance through the local debugging port (`127.0.0.1:9229`, never exposed to the network). Only use it on a machine you trust.
 
