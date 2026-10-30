@@ -16,6 +16,7 @@ Slack already detects RTL text (it puts `dir="auto"` on messages and the compose
 - Code blocks stay left-to-right
 - Composer, thread replies and message editing: each line gets its own direction as you type
 - Sidebar: the `guest` label no longer jumps in front of Hebrew names
+- Canvases: each paragraph takes its own direction; list, number and checkbox markers follow the item's language
 
 It also works in threads, search results, and light and dark themes.
 
@@ -42,7 +43,7 @@ To update, pull the latest version, click the reload icon on the extension's car
 
 ## Contributing
 
-PRs are welcome: bug fixes, coverage for parts of Slack that still render RTL badly (channel topics, canvases, …), Firefox support, store packaging.
+PRs are welcome: bug fixes, coverage for parts of Slack that still render RTL badly (channel topics, huddle chat, …), Firefox support, store packaging.
 
 Tips:
 

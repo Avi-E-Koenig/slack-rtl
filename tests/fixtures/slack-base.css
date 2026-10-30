@@ -13,3 +13,9 @@ body { font: 15px/1.46668 sans-serif; margin: 0; width: 800px; }
 .c-mrkdwn__quote::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #ddd; }
 .c-mrkdwn__pre { display: block; padding: 8px; white-space: pre; }
 .p-channel_sidebar__member_label { margin-left: 8px; }
+.document-content .section[data-section-type="1"] ul { list-style: none; margin: 0; padding: 0; }
+.document-content .section[data-section-type="1"] ul li.with-list-item-marker-container { display: flex; }
+.document-content .section[data-section-type="1"] ul li.with-list-item-marker-container .section { flex: 1 1 0%; }
+.document-content .section[data-section-type="1"] ul li.with-list-item-marker-container .list-item-marker-container { display: flex; width: 28px; padding-right: 4px; }
+.document-content .pseudo-before::before { content: "●"; }
+.document-content .section { unicode-bidi: isolate; }

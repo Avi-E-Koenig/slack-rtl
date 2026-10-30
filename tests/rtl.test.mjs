@@ -129,6 +129,26 @@ for (const engine of [chromium, firefox]) describe(engine.name(), () => {
     assert.ok(r.periodLast, 'English period stays at the end');
   });
 
+  test('canvas: paragraphs take their own direction', async () => {
+    const r = await fixed.evaluate(() => ({ he: edges('#cv-he .content'), en: edges('#cv-en .content') }));
+    assert.ok(r.he.gapRight < NEAR && r.he.gapLeft > NEAR, `Hebrew right: ${JSON.stringify(r.he)}`);
+    assert.ok(r.en.gapLeft < NEAR, `English left: ${JSON.stringify(r.en)}`);
+  });
+
+  test('canvas: list marker on the text-start side, with a gap', async () => {
+    const side = await fixed.evaluate(() => Object.fromEntries(['he', 'en'].map(k => {
+      const li = document.getElementById(`cv-li-${k}`);
+      const box = li.querySelector('.list-item-marker-container').getBoundingClientRect();
+      const glyph = li.querySelector('.pseudo-before').getBoundingClientRect(); // the bullet itself, excluding padding
+      const t = textRect(li.querySelector('.content'));
+      return [k, { markerRight: (box.left + box.right) / 2 > (t.left + t.right) / 2, gap: Math.max(t.left - glyph.right, glyph.left - t.right), textGapRight: li.getBoundingClientRect().right - box.right }];
+    })));
+    assert.ok(side.he.markerRight, 'Hebrew item: marker on the right');
+    assert.ok(side.he.textGapRight < NEAR, 'Hebrew item flush right');
+    assert.ok(side.he.gap >= 3, `gap between marker and Hebrew text: ${side.he.gap}`);
+    assert.ok(!side.en.markerRight, 'English item: marker on the left');
+  });
+
   test('sidebar: guest label follows the Hebrew name', async () => {
     const r = await fixed.evaluate(() => {
       const [name, label] = document.querySelectorAll('#sidebar .p-channel_sidebar__name > span');

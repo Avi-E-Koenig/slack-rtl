@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Canvases: per-paragraph direction; bulleted/numbered/checklist markers move to the right for Hebrew items.
 - Regression suite runs in both Chromium and Firefox (Gecko).
 - CI: tests + `web-ext lint` on every PR; tag `vX.Y.Z` builds the store zip and publishes a GitHub release.
 - Offline regression tests (`npm test`): geometry assertions on Slack-shaped fixtures, including a control test proving the fixtures reproduce the stock bugs.
