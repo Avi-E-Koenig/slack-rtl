@@ -1,14 +1,20 @@
 # Slack RTL
 
-A tiny, free Chrome extension that fixes Hebrew (and other right-to-left) text in the [Slack web app](https://app.slack.com).
+Free fixes for Hebrew (and other right-to-left) text in Slack, for both the **web app** and the **desktop app**.
 
-**[Add to Chrome from the Chrome Web Store](https://chromewebstore.google.com/detail/slack-rtl/ikenkefhipmmoaacphjacneglpmbabjp)**
+| You use Slack… | Get | |
+|---|---|---|
+| **In the browser** ([app.slack.com](https://app.slack.com)), Chrome or Edge | The **Chrome extension** | **[Add to Chrome](https://chromewebstore.google.com/detail/slack-rtl/ikenkefhipmmoaacphjacneglpmbabjp)** · [details](#install-in-chrome) |
+| **As the desktop app on Windows** | **Slack (RTL)**, a patched copy of your Slack app (experimental) | **[Step-by-step guide](desktop/windows/README.md)** |
+| As the desktop app on macOS or Linux | Not supported yet. Use the web app [installed as an app window](#use-it-like-a-desktop-app) | |
+
+Both use the same CSS fix ([`extension/rtl.css`](extension/rtl.css)), so Hebrew looks the same in either.
 
 **PRs are welcome!** See [Contributing](#contributing).
 
 ## What it fixes
 
-Slack already detects RTL text (it puts `dir="auto"` on messages and the composer), then overrides it with a hard-coded `text-align: left`. This extension undoes that and fixes the knock-on bidi bugs:
+Slack already detects RTL text (it puts `dir="auto"` on messages and the composer), then overrides it with a hard-coded `text-align: left`. Slack RTL undoes that and fixes the knock-on bidi bugs:
 
 - Hebrew messages align right; each line picks its own direction, so mixed Hebrew/English messages read correctly
 - Bulleted and numbered lists, with markers on the correct side
@@ -22,7 +28,7 @@ Slack already detects RTL text (it puts `dir="auto"` on messages and the compose
 
 It also works in threads, search results, and light and dark themes.
 
-It's **CSS only**: no JavaScript, no permissions, no data collection. It only runs on `app.slack.com`.
+The Chrome extension is **CSS only**: no JavaScript, no permissions, no data collection. It only runs on `app.slack.com`. The desktop installer adds that same CSS to a local copy of your Slack app and changes nothing else in it ([how it works](desktop/windows/README.md#how-it-works)).
 
 ## Install in Chrome
 
@@ -62,14 +68,17 @@ Install Slack as its own app window. It gets a taskbar or dock icon and notifica
 
 Firefox 109+: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on…** and pick `extension/manifest.json`. Temporary add-ons are removed when Firefox restarts until it's published on Firefox Add-ons.
 
-## The Slack desktop app is not supported
+## Install the desktop app version (Windows, experimental)
 
-The installed Slack desktop app (Electron) can't load browser extensions. We tried injecting the same CSS through a launcher ([#3](../../issues/3), [#16](../../pull/16)). It worked, but it isn't practical:
+Browser extensions can't run inside the installed Slack desktop app. On **Windows**, [`desktop/windows/`](desktop/windows) has an experimental installer that builds **Slack (RTL)**, a patched copy of your installed Slack with the same fix built in:
 
-- Slack deliberately refuses to start with a debugging port on its normal profile, to protect your session. So injection needs a separate Slack instance with its own profile and its own sign-in.
-- Signing in to that instance is unreliable. The browser's sign-in hand-off (`slack://…`) always goes to your normal Slack, never to the second instance.
+- Your installed Slack is never modified, and the copy opens already signed in.
+- No extra software is needed: double-click `slack-rtl-desktop.cmd`.
+- You re-run it after each Slack update.
 
-Patching Slack's app files isn't an option either: they're signed and overwritten on every update. Use the web app, ideally [installed as an app window](#use-it-like-a-desktop-app). If you find a clean way to support the desktop app, PRs are welcome.
+**[Step-by-step instructions →](desktop/windows/README.md)**
+
+The web app [installed as an app window](#use-it-like-a-desktop-app) is still the simpler option. macOS and Linux desktop apps are not supported. On macOS, patching means re-signing the app, which signs you out.
 
 ## Optional add-on: copy list numbers
 
@@ -77,13 +86,13 @@ Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [
 
 ## Limitations
 
-- Web app only: the [Slack desktop app is not supported](#the-slack-desktop-app-is-not-supported). Use the web app [installed as an app window](#use-it-like-a-desktop-app) instead.
+- Slack desktop app: Windows only, experimental, and must be rebuilt after each Slack update ([details](desktop/windows/README.md)). Otherwise use the web app [installed as an app window](#use-it-like-a-desktop-app).
 - Slack changes its markup from time to time; if something breaks, please open an issue (or a PR!).
 - When you copy a numbered list out of Slack, the numbers are dropped (Slack's copy behaviour); install the optional add-on above to keep them.
 
 ## Contributing
 
-PRs are welcome: bug fixes, coverage for parts of Slack that still render RTL badly (channel topics, huddle chat, …), Firefox support, Firefox Add-ons packaging.
+PRs are welcome: bug fixes, coverage for parts of Slack that still render RTL badly (channel topics, huddle chat, …), Firefox support, Firefox Add-ons packaging, testing the Windows desktop installer ([#22](../../issues/22)), macOS desktop support.
 
 Tips:
 
