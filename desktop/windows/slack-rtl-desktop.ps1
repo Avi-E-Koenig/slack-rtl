@@ -17,7 +17,8 @@
     4. On first install, copies your Slack profile (including your sign-in) to
        %LOCALAPPDATA%\SlackRTL\profile, so the copy opens already signed in.
        The copy and your normal Slack never share a profile.
-    5. Creates "Slack (RTL)" shortcuts on the desktop and in the Start menu.
+    5. Creates "Slack (RTL)" shortcuts on the desktop and in the Start menu,
+       with this project's own icon (slack-rtl.ico), not Slack's logo.
 
   Slack does not update the copy. After Slack updates itself, run this script
   again to rebuild the copy from the new version (your RTL profile is kept).
@@ -46,6 +47,8 @@ $Root        = Join-Path $env:LOCALAPPDATA 'SlackRTL'
 $AppDir      = Join-Path $Root 'app'
 $ProfileDir  = Join-Path $Root 'profile'
 $StateFile   = Join-Path $Root 'install.json'
+$IconPath    = Join-Path $Root 'slack-rtl.ico'
+$IconSource  = Join-Path $PSScriptRoot 'slack-rtl.ico'
 $ShortcutName = 'Slack (RTL).lnk'
 $MenuLnk     = Join-Path ([Environment]::GetFolderPath('Programs')) $ShortcutName
 $StartupLnk  = Join-Path ([Environment]::GetFolderPath('Startup')) $ShortcutName
@@ -241,7 +244,7 @@ function New-Shortcut($lnkPath) {
   $s.TargetPath = Join-Path $AppDir 'slack.exe'
   $s.Arguments = "--user-data-dir=`"$ProfileDir`""
   $s.WorkingDirectory = $AppDir
-  $s.IconLocation = (Join-Path $AppDir 'slack.exe') + ',0'
+  $s.IconLocation = "$IconPath,0"
   $s.Description = 'Slack with Hebrew/RTL support (patched copy)'
   $s.Save()
 }
@@ -293,6 +296,7 @@ Say "Found Slack $($slack.Version) ($($slack.Kind))"
 
 $cssFull = [IO.Path]::GetFullPath($CssPath)
 if (-not (Test-Path $cssFull)) { Fail "rtl.css not found at $cssFull. Run this from the downloaded slack-rtl folder." }
+if (-not (Test-Path $IconSource)) { Fail "slack-rtl.ico not found next to this script. Run this from the downloaded slack-rtl folder." }
 
 if (Get-SlackProcesses) {
   Fail 'Slack is running. Quit every Slack window first (tray icon next to the clock -> right-click Slack -> Quit), then run this again.'
@@ -325,6 +329,7 @@ if ($mainText.StartsWith($Marker)) { Fail 'The source Slack app is already patch
 
 $css = [IO.File]::ReadAllText($cssFull)
 $cssJs = ConvertTo-Json $css -Compress
+$iconJs = ConvertTo-Json $IconPath -Compress
 $inject = @"
 $Marker
 ;(function(){try{
@@ -334,6 +339,8 @@ $Marker
     try { if (/^https:\/\/app\.slack\.com\//.test(wc.getURL())) wc.insertCSS(css).catch(() => {}); } catch (_) {}
   };
   app.on('web-contents-created', (_e, wc) => { wc.on('dom-ready', () => inject(wc)); });
+  // Our own icon on the taskbar, so the copy isn't presented with Slack's logo.
+  app.on('browser-window-created', (_e, win) => { try { win.setIcon($iconJs); } catch (_) {} });
 }catch(e){ console.error('slack-rtl inject failed', e); }})();
 
 "@
@@ -353,6 +360,7 @@ if ($needProfile) {
 }
 
 Say '5/5 Creating "Slack (RTL)" shortcuts (desktop and Start menu)...'
+Copy-Item -Force $IconSource $IconPath
 New-Shortcut $MenuLnk
 New-Shortcut $DesktopLnk
 if ($Startup) { New-Shortcut $StartupLnk; Say '    also added to Windows startup' }

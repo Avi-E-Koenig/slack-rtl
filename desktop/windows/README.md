@@ -22,7 +22,7 @@ Tested with Slack **4.53** from the **Microsoft Store**. The slack.com version i
    - A black window shows 5 steps and ends with **Done**. It takes about a minute. Press any key to close it.
 4. **Open Slack (RTL):** double-click the **Slack (RTL)** icon on your desktop, or press the Windows key and type **Slack (RTL)**. Hebrew messages now align right.
 
-   The icon is the normal Slack logo, so check the name. To tell which Slack you're in, look at a Hebrew message: only Slack (RTL) aligns it right.
+   Slack (RTL) has its own purple **א** icon, on the desktop, in the Start menu and on the taskbar. That tells it apart from the normal Slack.
 
 **Use Slack (RTL) instead of your normal Slack.** You can pin it to the taskbar: right-click its taskbar icon while it's open, then click **Pin to taskbar**. Unpin the normal Slack so you don't open both. Running both is safe, but you get every notification twice.
 
@@ -70,7 +70,7 @@ This removes the copy, its profile and its shortcuts (desktop, Start menu and st
 2. It adds a few lines to the copy's startup code (inside `resources\app.asar`). They insert [`extension/rtl.css`](../../extension/rtl.css) into every `app.slack.com` page, the same CSS the Chrome extension uses.
 3. Slack checks at startup that `app.asar` is unmodified, so the copy would refuse to start. The installer turns that check off in the copy's `slack.exe` only (Electron's `EnableEmbeddedAsarIntegrityValidation` fuse). Nothing else in Slack's security settings changes.
 4. On first install it copies your Slack profile to `%LOCALAPPDATA%\SlackRTL\profile`. Windows encrypts the saved sign-in per Windows user, not per app, so the copy can use it. From then on the two profiles are separate, so the normal Slack and Slack (RTL) never write to the same files.
-5. It creates **Slack (RTL)** shortcuts on the desktop and in the Start menu that start the copy with that profile.
+5. It creates **Slack (RTL)** shortcuts on the desktop and in the Start menu that start the copy with that profile. The shortcuts and the window use this project's own icon ([`slack-rtl.ico`](slack-rtl.ico), made from [`icon.svg`](../../extension/icons/icon.svg) by `npm run icons`), not Slack's logo. The notification-area (tray) icon is still Slack's own.
 
 ### What to know
 
