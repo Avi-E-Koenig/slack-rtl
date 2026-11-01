@@ -2,6 +2,8 @@
 
 A tiny, free Chrome extension that fixes Hebrew (and other right-to-left) text in the [Slack web app](https://app.slack.com).
 
+**[Add to Chrome from the Chrome Web Store](https://chromewebstore.google.com/detail/slack-rtl/ikenkefhipmmoaacphjacneglpmbabjp)**
+
 **PRs are welcome!** See [Contributing](#contributing).
 
 ## What it fixes
@@ -24,7 +26,16 @@ It's **CSS only**: no JavaScript, no permissions, no data collection. It only ru
 
 ## Install in Chrome
 
-It's not on the Chrome Web Store yet, so you load it from this repo. It takes about a minute, and Edge and other Chromium browsers work the same way.
+1. Open **[Slack RTL on the Chrome Web Store](https://chromewebstore.google.com/detail/slack-rtl/ikenkefhipmmoaacphjacneglpmbabjp)** and click **Add to Chrome**.
+2. Refresh any open [app.slack.com](https://app.slack.com) tab. Hebrew messages now align right.
+
+Chrome keeps it up to date automatically. To remove it, right-click its icon → **Remove from Chrome**, or use `chrome://extensions`.
+
+Edge and other Chromium browsers can install it from the same page (in Edge, first allow **extensions from other stores** when prompted).
+
+### Manual install (from this repo)
+
+For trying unreleased changes, or for the [optional add-on](#optional-add-on-copy-list-numbers), which isn't in the store. It takes about a minute.
 
 1. **Download:** on this page click **Code → Download ZIP** ([direct link](../../archive/refs/heads/main.zip)), then extract the ZIP. You get a folder named `slack-rtl-main`.
 2. **Open the extensions page:** type `chrome://extensions` in the address bar.
@@ -62,7 +73,7 @@ Patching Slack's app files isn't an option either: they're signed and overwritte
 
 ## Optional add-on: copy list numbers
 
-Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [`extras/copy-list-numbers/`](extras/copy-list-numbers) is a separate, **opt-in** extension that puts them back. Unlike the main extension it contains a small script (it only rewrites the copied plain text, only on `app.slack.com`, and sends nothing anywhere). Install it the same way (**Load unpacked** → `extras/copy-list-numbers`).
+Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [`extras/copy-list-numbers/`](extras/copy-list-numbers) is a separate, **opt-in** extension that puts them back. Unlike the main extension it contains a small script (it only rewrites the copied plain text, only on `app.slack.com`, and sends nothing anywhere). It isn't in the store; install it [manually](#manual-install-from-this-repo) (**Load unpacked** → `extras/copy-list-numbers`).
 
 ## Limitations
 
@@ -72,7 +83,7 @@ Slack drops the `1.`, `2.` … when you copy a numbered list out of a message. [
 
 ## Contributing
 
-PRs are welcome: bug fixes, coverage for parts of Slack that still render RTL badly (channel topics, huddle chat, …), Firefox support, store packaging.
+PRs are welcome: bug fixes, coverage for parts of Slack that still render RTL badly (channel topics, huddle chat, …), Firefox support, Firefox Add-ons packaging.
 
 Tips:
 

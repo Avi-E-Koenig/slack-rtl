@@ -41,9 +41,9 @@ Not affiliated with or endorsed by Slack Technologies.
 - Small promo tile (440×280): optional.
 
 ## Release checklist
-- [ ] Chrome Web Store developer account (one-time $5) — owner
+- [x] Chrome Web Store developer account (one-time $5) — owner
 - [ ] Firefox Add-ons (AMO) account (free) — owner
 - [ ] Screenshots from a test workspace
 - [ ] `npm run package` → upload `dist/slack-rtl-<version>.zip` (AMO: same zip; source is the repo)
 - [ ] Optional add-on `extras/copy-list-numbers` as a second listing (declares a content script; same privacy answers, "no data collected")
-- [ ] Add store links to the README install section
+- [x] Add store links to the README install section (Chrome; live 2026-11-01)
