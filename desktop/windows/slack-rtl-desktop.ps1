@@ -17,7 +17,7 @@
     4. On first install, copies your Slack profile (including your sign-in) to
        %LOCALAPPDATA%\SlackRTL\profile, so the copy opens already signed in.
        The copy and your normal Slack never share a profile.
-    5. Creates a "Slack (RTL)" Start-menu shortcut.
+    5. Creates "Slack (RTL)" shortcuts on the desktop and in the Start menu.
 
   Slack does not update the copy. After Slack updates itself, run this script
   again to rebuild the copy from the new version (your RTL profile is kept).
@@ -49,6 +49,7 @@ $StateFile   = Join-Path $Root 'install.json'
 $ShortcutName = 'Slack (RTL).lnk'
 $MenuLnk     = Join-Path ([Environment]::GetFolderPath('Programs')) $ShortcutName
 $StartupLnk  = Join-Path ([Environment]::GetFolderPath('Startup')) $ShortcutName
+$DesktopLnk  = Join-Path ([Environment]::GetFolderPath('Desktop')) $ShortcutName
 $Marker      = '/* slack-rtl-desktop inject */'
 $FuseSentinel = 'dL7pKGdnNz796PbbjQWNKmHXBZaB9tsX'
 $FuseAsarIntegrityIndex = 4   # EnableEmbeddedAsarIntegrityValidation (Electron fuse schema v1)
@@ -231,7 +232,7 @@ function Disable-AsarIntegrityFuse($exePath) {
 # ------------------------------------------------------------------ actions
 
 function Remove-Shortcuts {
-  foreach ($l in @($MenuLnk, $StartupLnk)) { if (Test-Path $l) { Remove-Item -Force $l } }
+  foreach ($l in @($MenuLnk, $DesktopLnk, $StartupLnk)) { if (Test-Path $l) { Remove-Item -Force $l } }
 }
 
 function New-Shortcut($lnkPath) {
@@ -266,7 +267,7 @@ function Show-Status {
     if ($f) { Say "Integrity check : $(if ($f.Wire[$FuseAsarIntegrityIndex] -eq '0') { 'off (expected)' } else { 'ON - copy will not start' })" }
   }
   Say "Profile         : $(if (Test-Path $ProfileDir) { $ProfileDir } else { 'none' })"
-  Say "Shortcuts       : $(@($MenuLnk, $StartupLnk | Where-Object { Test-Path $_ }) -join ', ')"
+  Say "Shortcuts       : $(@($MenuLnk, $DesktopLnk, $StartupLnk | Where-Object { Test-Path $_ }) -join ', ')"
 }
 
 if ($Status) { Show-Status; exit 0 }
@@ -351,8 +352,9 @@ if ($needProfile) {
   Say '4/5 Keeping the existing Slack (RTL) profile (use -RefreshProfile to re-copy it).'
 }
 
-Say '5/5 Creating the "Slack (RTL)" shortcut...'
+Say '5/5 Creating "Slack (RTL)" shortcuts (desktop and Start menu)...'
 New-Shortcut $MenuLnk
+New-Shortcut $DesktopLnk
 if ($Startup) { New-Shortcut $StartupLnk; Say '    also added to Windows startup' }
 
 [pscustomobject]@{
@@ -361,6 +363,6 @@ if ($Startup) { New-Shortcut $StartupLnk; Say '    also added to Windows startup
 } | ConvertTo-Json | Set-Content -Encoding UTF8 $StateFile
 
 Say ''
-Say 'Done. Open "Slack (RTL)" from the Start menu.' Green
+Say 'Done. Open "Slack (RTL)" from your desktop or the Start menu.' Green
 Say 'Use it instead of your normal Slack. If both run, you get notifications twice.'
 Say 'After Slack updates itself, run this again to rebuild the copy.'
