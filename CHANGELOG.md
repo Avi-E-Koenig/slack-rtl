@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Experimental Slack desktop app support on Windows: `desktop/windows/slack-rtl-desktop.cmd` builds a patched copy of the installed Slack (rtl.css injected, asar integrity fuse off on the copy only, profile copied so the sign-in carries over). PowerShell only, no dependencies.
 - Docs: step-by-step Chrome install; the Slack desktop app is not supported (Slack blocks injection on its default profile; the separate-profile launcher was too fragile). Use the web app installed as an app window instead.
 - Optional add-on `extras/copy-list-numbers` (opt-in, JS): keeps numbers when copying numbered lists out of Slack.
 - Canvases: per-paragraph direction; bulleted/numbered/checklist markers move to the right for Hebrew items.
