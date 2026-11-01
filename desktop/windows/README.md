@@ -2,6 +2,8 @@
 
 Browser extensions can't run inside the Slack desktop app. This folder has a small installer that builds **Slack (RTL)**: a separate copy of your installed Slack desktop app with the same Hebrew/RTL fix built in.
 
+Slack RTL is an independent community project, not affiliated with or endorsed by Slack Technologies. The installer only modifies a local copy of the Slack app you already installed; it does not redistribute Slack.
+
 > **Easier and safer:** use the [Chrome extension](../../README.md#install-in-chrome) with the Slack web app [installed as an app window](../../README.md#use-it-like-a-desktop-app). It looks and behaves almost like the desktop app and needs none of the steps below. Use this installer only if you specifically want the desktop app.
 
 ## Before you start
